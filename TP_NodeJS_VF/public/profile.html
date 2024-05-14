@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('logoutSuccess', () => {
+            window.location.href = '/login.html';
+        });
+
+        socket.on('logoutError', (message) => {
+            alert(message);
+        });
+
+        function logout() {
+            socket.emit('logout');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Profile</h1>
+        <ul>
+            <li><a href="/upload.html">Upload a File</a></li>
+            <li><a href="/show.html">Show Last Uploaded Image</a></li>
+            <li><a href="/find.html">Find Files</a></li>
+            <li><a href="#" onclick="logout();">Logout</a></li>
+        </ul>
+    </div>
+</body>
+</html>

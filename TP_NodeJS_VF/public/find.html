@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Files</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('filesList', (files) => {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `/uploads/${file}`;
+                link.textContent = file;
+                link.target = '_blank';
+                li.appendChild(link);
+                fileList.appendChild(li);
+            });
+        });
+
+        socket.emit('find');
+
+        function logout() {
+            socket.emit('logout');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Files</h1>
+        <ul id="fileList"></ul>
+        <a href="/profile.html" class="button">Back to Profile</a>
+    </div>
+</body>
+</html>

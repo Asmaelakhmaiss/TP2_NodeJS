@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('uploadSuccess', () => {
+            alert('File uploaded successfully');
+            window.location.href = '/profile.html';
+        });
+
+        socket.on('uploadError', (message) => {
+            alert(message);
+        });
+
+        function uploadFile() {
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fileData = e.target.result.split(',')[1]; // Get base64 data
+                socket.emit('upload', { fileName: file.name, fileData: fileData });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function logout() {
+            socket.emit('logout');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload a file</h1>
+        <form onsubmit="event.preventDefault(); uploadFile();">
+            <input type="file" id="file" name="file" accept="image/*" required>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>

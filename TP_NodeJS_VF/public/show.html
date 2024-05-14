@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Last Uploaded Image</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('showFileLink', (fileLink) => {
+            const link = document.getElementById('fileLink');
+            link.href = fileLink;
+            link.textContent = 'Click here to view the last uploaded image';
+            link.style.display = 'block';
+        });
+
+        socket.on('showError', (message) => {
+            alert(message);
+        });
+
+        function showLastUploadedFile() {
+            socket.emit('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            showLastUploadedFile();
+        });
+
+        function logout() {
+            socket.emit('logout');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Show Last Uploaded Image</h1>
+        <a id="fileLink" style="display:none;"></a>
+        <a href="/profile.html" class="button">Back to Profile</a>
+    </div>
+</body>
+</html>
